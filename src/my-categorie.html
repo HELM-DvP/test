@@ -16,6 +16,30 @@
         <slot name="utente"></slot>
 
         <h1>Categorie</h1>
+        <dom-repeat items="{{categorie}}" index-as="index">
+            <template>
+                <table>
+                    <tr>
+                        <td>
+                            {{item.nome}}
+                        </td>
+                        <td>
+                            <dom-if if="[[confronto(item.utente.idUtente, user.id_token)]]" restamp="true">
+                                <template>
+                                    ACCA
+                                </template>
+                            </dom-if>
+                        </td>
+                        <td>
+                            {{item.utente.idUtente}}
+                        </td>
+                        <td>
+                            [[user.id_token]]
+                        </td>
+                    </tr>
+                </table>
+            </template>
+        </dom-repeat>
     </template>
     <script>
         class Categorie extends Polymer.Element {
@@ -23,12 +47,24 @@
                 return 'my-categorie';
             }
 
+            connectedCallback() {
+                super.connectedCallback();
+                this.categorie = {};
+            }
+
             handleResponse(event) {
                 let response = event.detail.response;
                 console.log(this.$.categoria.url)
                 console.log("test responseCategorie: " + response + this.user.id_token)
+                this.categorie = response;
+                console.log(this.categorie);
+            }
+
+            confronto(a, b) {
+                return a === b;
             }
         }
+
         window.customElements.define(Categorie.is, Categorie);
     </script>
 </dom-module>

@@ -106,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <my-homeutente name="homeutente"></my-homeutente>
                     <my-newmovimento name="newmovimento"></my-newmovimento>
                     <my-visualizza name="visualizza"></my-visualizza>
-                    <my-categorie name="categorie"></my-categorie>
+                    <my-categorie name="categorie" user="[[user]]"></my-categorie>
                     <my-view404 name="view404 "></my-view404>
                 </iron-pages>
             </app-header-layout>
@@ -139,7 +139,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             ready() {
                 super.ready();
-                this.addEventListener("user-logged-in ", (e) => this._onUserLoggedIn(e));
+                this.addEventListener("user-logged-in", (e) => this._onUserLoggedIn(e));
             }
 
             _onUserLoggedIn(event) {
@@ -148,7 +148,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
 
             slogga(event) {
-                this.dispatchEvent(new CustomEvent("user-logged-in ", {
+                this.dispatchEvent(new CustomEvent("user-logged-in", {
                     bubbles: true,
                     composed: true,
                     detail: {
