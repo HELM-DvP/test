@@ -1,0 +1,34 @@
+<!Doctype html>
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-categorie">
+    <template>
+        <style>
+             :host {
+                display: block;
+                padding: 16px;
+            }
+        </style>
+        <iron-ajax id="categoria" auto method="get" url="http://localhost:8080/SpeseApp/resources/categorie/[[user.id_token]]" handle-as="json" on-response="handleResponse">
+        </iron-ajax>
+        <slot name="utente"></slot>
+
+        <h1>Categorie</h1>
+    </template>
+    <script>
+        class Categorie extends Polymer.Element {
+            static get is() {
+                return 'my-categorie';
+            }
+
+            handleResponse(event) {
+                let response = event.detail.response;
+                console.log(this.$.categoria.url)
+                console.log("test responseCategorie: " + response + this.user.id_token)
+            }
+        }
+        window.customElements.define(Categorie.is, Categorie);
+    </script>
+</dom-module>

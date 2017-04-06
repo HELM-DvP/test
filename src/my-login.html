@@ -1,0 +1,74 @@
+<!Doctype html>
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+
+
+
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-login">
+    <template>
+        <style>
+             :host {
+                display: block;
+                padding: 16px;
+            }
+
+            .infoData {
+                width: 300px;
+            }
+        </style>
+        <app-location route="{{route}}"></app-location>
+        <iron-ajax id="login" method="post" url=" http://localhost:8080/SpeseApp/resources/utenti/login" handle-as="json" content-type="application/json" on-response="responseLogin" on-error="errorLogin"></iron-ajax>
+
+        <h1>LOGIN</h1>
+
+        <paper-input label="Username" value="{{newUsr.user}}" class="infoData"></paper-input>
+        <paper-input label="Password" value="{{newUsr.pwd}}" class="infoData"></paper-input>
+        <br/>
+        <paper-button raised on-tap="funzlogin">LOGIN</paper-button>
+
+    </template>
+    <script>
+        class Login extends Polymer.Element {
+            static get is() {
+                return 'my-login';
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                this.newUsr = {};
+            }
+
+            funzlogin() {
+                this.newUsr = {
+                    "user": this.newUsr.user,
+                    "pwd": this.newUsr.pwd
+                }
+                console.log(this.newUsr);
+                this.$.login.body = this.newUsr;
+                this.$.login.generateRequest();
+            }
+
+            responseLogin(data) {
+                let response = data.detail.response;
+                console.log(response)
+                this.dispatchEvent(new CustomEvent("user-logged-in", {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
+                        id_token: response.id_token,
+                        loggedin: true
+                    }
+                }));
+                console.log(response.detail)
+                this.set('route.path', '/homeutente');
+            }
+        }
+        window.customElements.define(Login.is, Login);
+    </script>
+</dom-module>

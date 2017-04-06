@@ -1,0 +1,34 @@
+<!Doctype html>
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-homeutente">
+    <template>
+        <style>
+             :host {
+                display: block;
+                padding: 16px;
+            }
+        </style>
+        <h1>HOME UTENTE</h1>
+        <p>
+            Totale movimenti del mese corrente
+
+            <span>45</span>
+        </p>
+
+        <p>
+            Ultima spesa effettuata
+            <span>54</span>
+        </p>
+
+    </template>
+    <script>
+        class HomeUtente extends Polymer.Element {
+            static get is() {
+                return 'my-homeutente';
+            }
+        }
+        window.customElements.define(HomeUtente.is, HomeUtente);
+    </script>
+</dom-module>

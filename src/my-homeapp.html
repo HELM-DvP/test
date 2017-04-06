@@ -1,0 +1,58 @@
+<!Doctype html>
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-homeapp">
+    <template>
+        <style>
+             :host {
+                display: block;
+                padding: 16px;
+            }
+        </style>
+        <app-location route="{{route}}"></app-location>
+
+        <h1>HOME APP</h1>
+        <p>
+            Benvenuto bla bla bla ... con questa nuova app potrai tener traccia delle spese fatte da quella pazza di tua moglie (o della tua amante!) Mi raccomando, usare con cautela!
+        </p>
+        <p>
+            Se sei già un nostro utente, fai pure la LOGIN .... altrimenti non esitare, REGISTRATI
+        </p>
+
+        <paper-button raised on-tap="redirectLogin">LOGIN</paper-button>
+        <paper-button raised on-tap="redirectRegistrazione">REGISTRATI</paper-button>
+
+
+    </template>
+    <script>
+        class HomeApp extends Polymer.Element {
+            static get is() {
+                return 'my-homeapp';
+            }
+
+            redirectLogin() {
+                console.log("redirectLogin ...")
+                this.set('route.path', '/login');
+            }
+
+            redirectRegistrazione() {
+                this.set('route.path', '/registra');
+            }
+        }
+        window.customElements.define(HomeApp.is, HomeApp);
+    </script>
+</dom-module>

@@ -1,0 +1,188 @@
+<!Doctype html>
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/app-datepicker/app-datepicker.html">
+
+<dom-module id="my-newmovimento">
+    <template>
+        <style>
+             :host {
+                display: block;
+                padding: 16px;
+            }
+
+            .allineaContenuti paper-fab,
+            h1,
+            paper-fab {
+                display: inline-block;
+            }
+
+            .tondo {
+                border-radius: 50% !important;
+                width: 30px !important;
+                height: 50px !important;
+                background-color: #4285f4;
+                color: white;
+            }
+
+            .infoData {
+                width: 300px;
+            }
+
+            #sceltaData {
+                width: 200px;
+                height: 200px;
+            }
+
+            .dialogDati {
+                padding: 16px;
+            }
+
+            .infoData {
+                width: 300px;
+            }
+
+            .allineaDestra {
+                width: 100%;
+                text-align: right;
+            }
+        </style>
+        <div class="allineaContenuti">
+            <h1>NEW MOVIMENTO</h1> &nbsp;
+            <paper-button raised class="tondo" on-tap="apriIstruzioni"><b>?</b></paper-button>
+
+        </div>
+        <paper-textarea id="area" label="importo" class="infoData"> </paper-textarea>
+        <div class="allineaContenuti">
+            <paper-fab icon="icons:add"></paper-fab>
+            <paper-fab icon="icons:remove"></paper-fab>
+        </div>
+        <paper-dropdown-menu label="Dinosaurs">
+            <paper-listbox class="dropdown-content" selected="1">
+                <paper-item>allosaurus</paper-item>
+                <paper-item>brontosaurus</paper-item>
+                <paper-item>carcharodontosaurus</paper-item>
+                <paper-item>diplodocus</paper-item>
+            </paper-listbox>
+        </paper-dropdown-menu>
+        <br/>
+        <paper-autogrow-textarea id="a1">
+            Note:
+            <textarea id="t1"></textarea>
+        </paper-autogrow-textarea>
+        <div class="allineaContenuti">
+            <paper-button raised>OCCASIONALE</paper-button>
+            <paper-button raised on-tap="apriRicorrente">RICORRENTE</paper-button>
+        </div>
+        </br/>
+        <paper-fab icon="icons:check" on-tap="apriConferma"></paper-fab>
+
+        <!-- DIALOG ISTRUZIONI -->
+        <paper-dialog id="istruzioni" class="dialogDati">
+            <h2>Istruzioni</h2>
+            <paper-dialog-scrollable>
+                <div class="allineaDestra">
+                    <paper-fab icon="icons:check" on-tap="chiudiIstruzioni"></paper-fab>
+                </div>
+            </paper-dialog-scrollable>
+        </paper-dialog>
+
+        <!-- DIALOG RICORRENTE -->
+        <paper-dialog id="movimentoRicorrente" class="dialogDati">
+            <h2>Movimento Ricorrente</h2>
+            <paper-dialog-scrollable>
+                data prima ricorrenza:
+                <br>
+                <paper-dropdown-menu label="Giorno" id="giorno">
+                    <paper-listbox class="dropdown-content" selected="1">
+                        <dom-repeat items="{{giorni}}" index-as="index">
+                            <template>
+                                <paper-item>{{item}}</paper-item>
+                            </template>
+                        </dom-repeat>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+                <br>
+                <paper-dropdown-menu label="Mese" id="mese">
+                    <paper-listbox class="dropdown-content" selected="1">
+                        <dom-repeat items="{{mesi}}" index-as="index">
+                            <template>
+                                <paper-item>{{item}}</paper-item>
+                            </template>
+                        </dom-repeat>
+                    </paper-listbox>
+                </paper-dropdown-menu>
+                <paper-input label="Numero di rate" class="infoData"></paper-input>
+                <br>
+                <fieldset>
+                    <legend>Specificare la frequenza:</legend>
+                    <input type="radio" name="linguaggio" value="1" />Settimanale<br/>
+                    <input type="radio" name="linguaggio" value="2" /> Mensile<br/>
+                    <input type="radio" name="linguaggio" value="3" /> Annuale<br/>
+                </fieldset>
+                <br/>
+                <div class="allineaDestra">
+                    <paper-fab icon="icons:check" on-tap=""></paper-fab>
+                    <paper-fab icon="icons:close" on-tap="chiudiRicorrente"></paper-fab>
+                </div>
+            </paper-dialog-scrollable>
+        </paper-dialog>
+
+        <!-- DIALOG CONFERMA -->
+        <paper-dialog id="dialogConferma" class="dialogDati">
+            <h2>Dialog Conferma</h2>
+            <paper-dialog-scrollable>
+                <div class="allineaDestra">
+                    <paper-fab icon="icons:check" on-tap=""></paper-fab>
+                    <paper-fab icon="icons:close" on-tap="chiudiConferma"></paper-fab>
+                </div>
+            </paper-dialog-scrollable>
+        </paper-dialog>
+    </template>
+    <script>
+        class NewMovimento extends Polymer.Element {
+            static get is() {
+                return 'my-newmovimento';
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                this.giorni = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+                this.mesi = ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"];
+            }
+
+            apriIstruzioni() {
+                this.$.istruzioni.toggle();
+            }
+
+            chiudiIstruzioni() {
+                this.$.istruzioni.close();
+            }
+
+            apriRicorrente() {
+                this.$.movimentoRicorrente.toggle();
+            }
+
+            chiudiRicorrente() {
+                this.$.movimentoRicorrente.close();
+            }
+
+            apriConferma() {
+                this.$.dialogConferma.toggle();
+            }
+
+            chiudiConferma() {
+                this.$.dialogConferma.close();
+            }
+        }
+        window.customElements.define(NewMovimento.is, NewMovimento);
+    </script>
+</dom-module>

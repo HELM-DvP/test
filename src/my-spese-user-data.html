@@ -1,0 +1,36 @@
+<!Doctype html>
+<dom-module id="user-data">
+
+    <script>
+        class Userdata extends Polymer.Element {
+            static get is() {
+                return "user-data";
+            }
+
+            constructor() {
+                super();
+            }
+
+            static get properties() {
+                return {
+                    user: {
+                        type: Object,
+                        value: {
+                            "id_token": 0,
+                            "loggedin": false
+                        },
+                        notify: true
+                    }
+                }
+            }
+
+            setUser(data) {
+                this.set('user.id_token', data.id_token);
+                this.set('user.loggedin', data.loggedin);
+            }
+
+        }
+        window.customElements.define(Userdata.is, Userdata);
+    </script>
+
+</dom-module>

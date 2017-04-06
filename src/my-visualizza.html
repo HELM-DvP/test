@@ -1,0 +1,23 @@
+<!Doctype html>
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-visualizza">
+    <template>
+        <style>
+             :host {
+                display: block;
+                padding: 16px;
+            }
+        </style>
+        <h1>VISUALIZZA</h1>
+    </template>
+    <script>
+        class Visualizza extends Polymer.Element {
+            static get is() {
+                return 'my-visualizza';
+            }
+        }
+        window.customElements.define(Visualizza.is, Visualizza);
+    </script>
+</dom-module>
