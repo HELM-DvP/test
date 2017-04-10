@@ -1,0 +1,31 @@
+<!Doctype html>
+<dom-module id="categoria-data">
+
+    <script>
+        class Categoriadata extends Polymer.Element {
+            static get is() {
+                return "categoria-data";
+            }
+
+            constructor() {
+                super();
+            }
+
+            static get properties() {
+                return {
+                    categoria: {
+                        type: Number,
+                        value: 0,
+                        notify: true
+                    }
+                }
+            }
+
+            setCategoria(data) {
+                this.set('categoria', data);
+                //console.log("imposta idCategoria : " + data);
+            }
+        }
+        window.customElements.define(Categoriadata.is, Categoriadata);
+    </script>
+</dom-module>

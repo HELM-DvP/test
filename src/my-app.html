@@ -21,7 +21,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
 <link rel="import" href="./my-spese-user-data.html">
+<link rel="import" href="./my-spese-categoria-data.html">
+
 <link rel="import" href="my-icons.html">
 
 <dom-module id="my-app">
@@ -64,6 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         </style>
         <user-data id="user" user="{{user}}"></user-data>
+        <categoria-data id="categoria" categoria="{{categoria}}"></categoria-data>
         <app-location route="{{route}}"></app-location>
         <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
@@ -106,7 +111,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <my-homeutente name="homeutente"></my-homeutente>
                     <my-newmovimento name="newmovimento"></my-newmovimento>
                     <my-visualizza name="visualizza"></my-visualizza>
-                    <my-categorie name="categorie" user="[[user]]"></my-categorie>
+                    <my-categorie name="categorie" user="[[user]]" categoria="[[categoria]]"></my-categorie>
                     <my-view404 name="view404 "></my-view404>
                 </iron-pages>
             </app-header-layout>
@@ -127,7 +132,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                         reflectToAttribute: true,
                         observer: '_pageChanged',
                     },
-
                 }
             }
 
@@ -140,6 +144,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             ready() {
                 super.ready();
                 this.addEventListener("user-logged-in", (e) => this._onUserLoggedIn(e));
+                this.addEventListener("categoria-changed-for-delete", (e) => this._onCategoriaSelectedForDel(e));
+            }
+
+            _onCategoriaSelectedForDel(event) {
+                this.$.categoria.setCategoria(event.detail);
+                console.log("idCategoria : " + event.detail);
+                console.log("voglio cancellare la categoria numero : " + event.detail);
+                //console.log(this.$.categoria.categoria)
             }
 
             _onUserLoggedIn(event) {

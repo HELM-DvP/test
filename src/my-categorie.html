@@ -1,6 +1,14 @@
 <!Doctype html>
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+
+
+
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="my-categorie">
@@ -10,15 +18,27 @@
                 display: block;
                 padding: 16px;
             }
+
+            .dialogDati {
+                padding: 16px;
+            }
+
+            .allineaDestra {
+                width: 100%;
+                text-align: right;
+            }
         </style>
         <iron-ajax id="categoria" auto method="get" url="http://localhost:8080/SpeseApp/resources/categorie/[[user.id_token]]" handle-as="json" on-response="handleResponse">
         </iron-ajax>
+
+        <iron-ajax id="effettuaCancellazione" method="delete" handle-as="json" on-response="handleResponseCancella"></iron-ajax>
+
         <slot name="utente"></slot>
 
         <h1>Categorie</h1>
-        <dom-repeat items="{{categorie}}" index-as="index">
-            <template>
-                <table>
+        <table>
+            <dom-repeat items="{{categorie}}" index-as="index">
+                <template>
                     <tr>
                         <td>
                             {{item.nome}}
@@ -26,20 +46,29 @@
                         <td>
                             <dom-if if="[[confronto(item.utente.idUtente, user.id_token)]]" restamp="true">
                                 <template>
-                                    ACCA
+                                    <paper-button id="mod" raised on-tap="modCategoria">Modifica</paper-button>
+                                    <paper-button id="canc[[item.idCategoria]]" raised on-tap="delCategoria" value="{{item.idCategoria}}">Elimina</paper-button>
                                 </template>
                             </dom-if>
                         </td>
-                        <td>
-                            {{item.utente.idUtente}}
-                        </td>
-                        <td>
-                            [[user.id_token]]
-                        </td>
                     </tr>
-                </table>
-            </template>
-        </dom-repeat>
+                </template>
+            </dom-repeat>
+        </table>
+        <br>
+        <paper-button raised on-click="addCategoria">Nuova Categoria</paper-button>
+
+        <!-- DIALOG NUOVA CATEGORIA -->
+        <paper-dialog id="newCategoria" class="dialogDati">
+            <iron-ajax id="req" method="post" handle-as="json" content-type="application/json" on-response="handleResponseCrea"></iron-ajax>
+            <h2>Aggiungi</h2>
+            <paper-dialog-scrollable>
+                <paper-input id="nomeCategoria" value="{{nuovaCategoria.nome}}"></paper-input>
+                <div class="allineaDestra">
+                    <paper-fab icon="icons:check" on-tap="salvaCategoria"></paper-fab>
+                </div>
+            </paper-dialog-scrollable>
+        </paper-dialog>
     </template>
     <script>
         class Categorie extends Polymer.Element {
@@ -47,9 +76,14 @@
                 return 'my-categorie';
             }
 
+            handleResponseCancella() {
+                this.$.categoria.generateRequest();
+            }
+
             connectedCallback() {
                 super.connectedCallback();
                 this.categorie = {};
+                this.nuovaCategoria = {};
             }
 
             handleResponse(event) {
@@ -58,6 +92,50 @@
                 console.log("test responseCategorie: " + response + this.user.id_token)
                 this.categorie = response;
                 console.log(this.categorie);
+
+            }
+
+            handleResponseCrea(event) {
+                this.$.categoria.generateRequest();
+            }
+
+            addCategoria() {
+                this.$.newCategoria.toggle();
+            }
+
+            salvaCategoria() {
+                this.nuovaCategoria = {
+                    nome: this.nuovaCategoria.nome,
+                    idUtente: this.user.id_token
+                }
+                this.$.req.body = this.nuovaCategoria;
+                this.$.req.headers = {
+                    id_token: this.user.id_token
+                }
+                this.$.req.url = "http://localhost:8080/SpeseApp/resources/categorie/crea/";
+                this.$.req.generateRequest();
+                this.$.newCategoria.close();
+                this.handleResponse;
+                this.set('route.path', '/categorie');
+            }
+
+            delCategoria(e) {
+                var cat = e.model;
+                console.log("prendo" + cat.item.idCategoria)
+                console.log("passo " + this.nuovaCategoria);
+                console.log("delCategoria()...");
+                this.dispatchEvent(new CustomEvent("categoria-changed-for-delete", {
+                    bubbles: true,
+                    composed: true,
+                    detail: cat.item.idCategoria
+                }));
+                //console.log("adesso catgoria.categoria : " + this.categoria);
+                this.$.effettuaCancellazione.headers = {
+                    id_token: this.user.id_token
+                }
+                this.$.effettuaCancellazione.url = "http://localhost:8080/SpeseApp/resources/categorie/" + this.categoria;
+                console.log(this.$.effettuaCancellazione.url);
+                this.$.effettuaCancellazione.generateRequest();
             }
 
             confronto(a, b) {

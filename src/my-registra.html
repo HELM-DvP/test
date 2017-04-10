@@ -63,13 +63,25 @@
                     bubbles: true,
                     composed: true,
                     detail: {
+                        id_token: response.idUtente,
+                        loggedin: true
+                    }
+                }));
+                this.set('route.path', '/homeutente');
+                /*
+                let response = data.detail.response;
+                console.log("registra" + response)
+                this.dispatchEvent(new CustomEvent("user-logged-in", {
+                    bubbles: true,
+                    composed: true,
+                    detail: {
                         id_token: response.id_token,
                         loggedin: true
                     }
                 }));
 
                 this.set('route.path', '/homeutente');
-
+*/
                 /*if (response.id_token) {
                     this.error = null;
                     this.storedUser = {
